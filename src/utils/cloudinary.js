@@ -1,5 +1,9 @@
 import {v2 as cloudinary} from "cloudinary"
-import fs from "cloudinary"
+import fs from "fs"
+
+console.log("CLOUD NAME:", process.env.CLOUDINARY_CLOUD_NAME);
+console.log("API KEY:", process.env.CLOUDINARY_API_KEY);
+console.log("API SECRET:")
 
 
 cloudinary.config({ 
@@ -17,14 +21,18 @@ const uploadOnCloudinary = async (localFilePath) => {
             resource_type: "auto"
         })
         //file has been uploaded successfull
-        console.log("file is uploaded on cloudinary", response.url);
-        return response;
+        // console.log("file is uploaded on cloudinary", response.url);
+        // return response;
+
+        fs.unlinkSync(localFilePath)
         
-    } catch (error) {
-        fs.unlinkSync(localFilePath) //remove the locally saved temporay file 
-        // as the upload operation fot failed
-        return null;
-    }
+   } catch (error) {
+    console.log("CLOUDINARY ERROR:", error);
+
+    fs.unlinkSync(localFilePath);
+
+    return null;
+}
 }
 
 export {uploadOnCloudinary}
